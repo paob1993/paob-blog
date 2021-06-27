@@ -22,7 +22,7 @@ class PublicationController extends Controller {
         $total = $publicaciones->count();
         $data = $publicaciones->offset(($page - 1) * 5)->limit(5)->get();
         if ($data->count() == 0) {
-            return response()->json(['message' => 'No existe lapágina que desea obtener'], 400);
+            return response()->json(['message' => 'No existe la página que desea obtener'], 400);
         }
 
         return response()->json([
@@ -73,34 +73,72 @@ class PublicationController extends Controller {
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Publication  $publication
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
+    public function show($id) {
+        $publication = Publication::find($id);
+        if (!$publication) {            
+            return response()->json(['message' => 'No existe la publicación que desea obtener'], 400);
+        }
+        return response()->json([
+            'message' => 'Publicación recuperada correctamente',
+            'publication' => $publication
+        ], 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Publication  $publication
+     * @param  @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Publication $publication)
-    {
-        //
+    public function update(Request $request, $id) {
+        $publication = Publication::find($id);
+        if (!$publication) {            
+            return response()->json(['message' => 'No existe la publicación que desea obtener'], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'max:'.Publication::MAX_LENGTH_TITLE,
+            'author' => 'max:'.Publication::MAX_LENGTH_AUTHOR
+        ], [
+            'title.max' => 'El título debe contener un máximo de :max caracteres.',
+            'author.max' => 'El autor debe contener un máximo de :max caracteres.'
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()->first()], 400);
+        }
+        
+        $publication->image = $request->image;
+        $publication->title = $request->title;
+        $publication->content = $request->content;
+        $publication->publish_date = $request->publish_date ? $request->publish_date : $publication->publish_date;
+        $publication->author = $request->author;
+        if (!$publication->save()) {
+            return response()->json(['message' => 'No se pudo actualizar la publicación, intente de nuevo'], 400);
+        }
+
+        return response()->json(['message' => 'Publicación actualizada correctamente'], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Publication  $publication
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Publication $publication)
-    {
-        //
+    public function destroy($id) {
+        $publication = Publication::find($id);
+        if (!$publication) {            
+            return response()->json(['message' => 'No existe la publicación que desea eliminar'], 400);
+        }
+        if (!$publication->delete()) {            
+            return response()->json(['message' => 'No se ha podido eliminar la publicación'], 400);
+        }
+
+        return response()->json(['message' => 'Publicación eliminada correctamente'], 200);
+
     }
 }
