@@ -25,7 +25,7 @@ Route::group(['prefix' => 'auth'], function() {
 });
 
 Route::group(['prefix' => 'publications'], function() {
-    Route::get('/page={page}', [PublicationController::class, 'index'])->name('publications');
+    Route::get('/', [PublicationController::class, 'index'])->name('publications');
     Route::get('/{id}', [PublicationController::class, 'show']);
     Route::group(['middleware' => ['auth:api', 'admin']], function() {
         Route::post('/', [PublicationController::class, 'store']);

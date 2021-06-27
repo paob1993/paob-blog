@@ -14,7 +14,8 @@ class PublicationController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($page) {
+    public function index(Request $request) {
+        $page = $request->query('page', 1);
         $publicaciones = Publication::orderBy('publish_date', 'desc');
         if (!$publicaciones) {
             return response()->json(['message' => 'No se pudo recuperar la información de las publicaciones'], 400);
