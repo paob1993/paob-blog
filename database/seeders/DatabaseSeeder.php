@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -11,8 +12,19 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
-    {
-        // \App\Models\User::factory(10)->create();
+    public function run() {
+        DB::table('users')->insert([
+            'name' => 'Admin',
+            'lastname' => 'Blog',
+            'email' => 'admin@blog.com',
+            'password' => '$2y$10$RTUHF4Bh2eiTqXvI7/bwDuMKRmzLNNFqfxVB1o/FdPvmmNgF/G7GS',
+            'rol' => 1
+        ]);
+        DB::table('users')->insert([
+            'name' => 'User',
+            'lastname' => 'Blog',
+            'email' => 'user@blog.com',
+            'password' => '$2y$10$RTUHF4Bh2eiTqXvI7/bwDuMKRmzLNNFqfxVB1o/FdPvmmNgF/G7GS'
+        ]);
     }
 }
