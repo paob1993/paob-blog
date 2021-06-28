@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'auth'], function() {
+    Route::post('signup', [AuthController::class, 'signup']);
     Route::post('login', [AuthController::class, 'login']);
-    Route::post('singup', [AuthController::class, 'singup']);
 
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', [AuthController::class, 'logout']);

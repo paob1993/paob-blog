@@ -22,7 +22,7 @@ class PublicationController extends Controller {
         }
         $total = $publicaciones->count();
         $data = $publicaciones->offset(($page - 1) * 5)->limit(5)->get();
-        if ($data->count() == 0) {
+        if ($data->count() == 0 && $page != 1) {
             return response()->json(['message' => 'No existe la página que desea obtener'], 400);
         }
 
@@ -30,7 +30,7 @@ class PublicationController extends Controller {
             'message' => 'Información recuperada exitosamente',
             'publications' => $data,
             'total' => $total,
-             'page' => $page
+            'page' => $page
         ], 200);
     }
 
