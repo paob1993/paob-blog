@@ -30,4 +30,8 @@ class Publication extends Model {
         'author'
     ];
 
+    public function interactions() {
+        return $this->belongsToMany(User::class, 'interactions')->withPivot('visits', 'reaction');
+    }
+
 }

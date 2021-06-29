@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             'lastname' => 'Blog',
             'email' => 'admin@blog.com',
             'password' => '$2y$10$RTUHF4Bh2eiTqXvI7/bwDuMKRmzLNNFqfxVB1o/FdPvmmNgF/G7GS',
-            'rol' => 1
+            'role' => 1
         ]);
         DB::table('users')->insert([
             'name' => 'User',

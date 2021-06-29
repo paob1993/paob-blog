@@ -13,12 +13,12 @@ class User  extends Authenticatable {
     /**
     * @const int Constant indicating the administrator role
    */
-   const ROL_ADMINISTRADOR = 1;
+   const ROLE_ADMINISTRADOR = 1;
 
    /**
     * @const int Constant indicating the user role
    */
-   const ROL_USER = 2;
+   const ROLE_USER = 2;
 
    
     /**
@@ -70,7 +70,7 @@ class User  extends Authenticatable {
      * @return boolean
     */
     public function isAdministrador() {
-        return $this->rol == User::ROL_ADMINISTRADOR;
+        return $this->role == User::ROLE_ADMINISTRADOR;
     }
 
     /**
@@ -79,6 +79,10 @@ class User  extends Authenticatable {
      * @return boolean
     */
     public function isUser() {
-        return $this->rol == User::ROL_USER;
+        return $this->role == User::ROLE_USER;
+    }
+
+    public function interactions() {
+        return $this->belongsToMany(Publication::class, 'interactions')->withPivot('visits', 'reaction');
     }
 }
