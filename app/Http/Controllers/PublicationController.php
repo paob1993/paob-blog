@@ -142,4 +142,40 @@ class PublicationController extends Controller {
         return response()->json(['message' => 'Publicación eliminada correctamente'], 200);
 
     }
+
+    public function getNext($id) {
+        $actual_publication = Publication::find($id);
+        if (!$actual_publication) {            
+            return response()->json(['message' => 'No es posible obtener los datos de la publicación actual'], 400);
+        }
+        $publication = Publication::orderBy('publish_date', 'desc')->where('publish_date', '<', $actual_publication->publish_date)->first();
+        if (!$publication) {            
+            return response()->json([
+                'message' => 'No existen más publicaciones',
+                'publication' => null
+            ], 200);
+        }          
+        return response()->json([
+            'message' => 'Publicación recuperada correctamente',
+            'publication' => $publication
+        ], 200);
+    }
+
+    public function getPrevious($id) {
+        $actual_publication = Publication::find($id);
+        if (!$actual_publication) {            
+            return response()->json(['message' => 'No es posible obtener los datos de la publicación actual'], 400);
+        }
+        $publication = Publication::orderBy('publish_date', 'desc')->where('publish_date', '>', $actual_publication->publish_date)->first();
+        if (!$publication) {            
+            return response()->json([
+                'message' => 'No existen más publicaciones',
+                'publication' => null
+            ], 200);
+        }          
+        return response()->json([
+            'message' => 'Publicación recuperada correctamente',
+            'publication' => $publication
+        ], 200);
+    }
 }
